@@ -1,13 +1,19 @@
 const ConnectChromecast = require('./client');
-const SessionFinder = require('./media');
+const SessionFinder = require('./application');
 
 
 const host = "192.168.1.123";
 
-ConnectChromecast(host).then(client =>{
-    SessionFinder(client).then(application =>{
-        application.getStatus((a, b)=>{
-            const link = `https://youtu.be/${b.media.contentId}?t=${b.currentTime}`;
-        })
+function GetChromecastApplication(){
+    return new Promise((resolve, reject)=>{
+        ConnectChromecast(host).then(client =>{
+            SessionFinder(client).then(application =>{
+                resolve(application);
+            });
+        });
     });
-});
+}
+
+module.exports = GetChromecastApplication;
+
+

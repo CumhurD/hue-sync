@@ -1,4 +1,4 @@
-const Youtube = require('./Youtube');
+const Youtube = require('./Applications/Youtube');
 
 function getMedia(client) {
     return new Promise((resolve, reject) => {
