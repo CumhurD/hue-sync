@@ -17,6 +17,7 @@
         "child_process": "^1.0.2",
         "get-image-colors": "^2.0.0",
         "path": "^0.12.7",
+        "youtube-player": "^5.5.2",
         "youtube-video-to-frames": "^1.0.2"
     }
 }

@@ -1,6 +1,6 @@
 const ChromeCastService = require('./chromecast/chromecast.service');
-const childProc = require('child_process');
-const UPDATE_INTERVAL = 5000;
+const browser = require('./chrome');
+const UPDATE_INTERVAL = 1000;
 
 // const youtubeLinkFormat = `https://youtu.be/${application.media.contentId}?t=${application.currentTime}`
 const self = this;
@@ -25,27 +25,16 @@ function shouldSync(oldContent, newContent) {
     return isTimeSyncNeeded || isContentChanged;
 }
 
-async function sync(castedApp){
+async function sync(castedApp) {
     const currentContent = await castedApp.getStatus();
 
     let isUpdateNeeded = shouldSync(self.oldContent, currentContent);
     self.oldContent = currentContent;
 
     if (isUpdateNeeded) {
-        console.warn('Update needed! oldTime:' + oldTime + ' currentTime:' + currentTime + 'diff: ' + diff);
-        const link = `https://youtu.be/${playingContent.media.contentId}?t=${currentTime}`;
+        const link = `https://youtu.be/${currentContent.media.contentId}?t=${Math.ceil(currentContent.currentTime + 1.3)}`;
 
-        childProc.exec(`open -a "Google Chrome" ${link}`, function (err) {
-            if (err) {
-                console.error(err);
-            }
-            else {
-                console.log("success open");
-            }
-        });
-    }
-    else {
-        console.warn('Update not needed! diff: ' + diff);
+        browser(link);
     }
 }
 
