@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "nodev3",
+            "name": "Launch Program",
             "program": "${workspaceFolder}/index.js",
             "skipFiles": [
                 "<node_internals>/**"

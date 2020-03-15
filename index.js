@@ -1,47 +1,29 @@
-const ChromeCastService = require('./chromecast/chromecast.service');
-const browser = require('./chrome');
-const UPDATE_INTERVAL = 1000;
+const config = require('./common/config/env.config.js');
 
-// const youtubeLinkFormat = `https://youtu.be/${application.media.contentId}?t=${application.currentTime}`
-const self = this;
-self.oldContent = {};
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
-function shouldSync(oldContent, newContent) {
-    let currentTime = Math.ceil(newContent.currentTime);
-    let oldTime = Math.ceil(oldContent.currentTime);
+const ChromecastRouter = require('./chromecast/routes.config');
 
-    let diff = currentTime - (oldTime + UPDATE_INTERVAL / 1000);
-
-    let isTimeSyncNeeded = diff > 1 || diff < -1 || isNaN(diff);
-    let isContentChanged = !oldContent.media || oldContent.media.contentId != newContent.media.contentId
-
-    if (isContentChanged)
-        console.warn('Playing media changed. Sync started.');
-    else if (isTimeSyncNeeded)
-        console.warn('Media time is not sync. Sync started.');
-    else
-        console.debug('Media & time is sync.');
-
-    return isTimeSyncNeeded || isContentChanged;
-}
-
-async function sync(castedApp) {
-    const currentContent = await castedApp.getStatus();
-
-    let isUpdateNeeded = shouldSync(self.oldContent, currentContent);
-    self.oldContent = currentContent;
-
-    if (isUpdateNeeded) {
-        const link = `https://youtu.be/${currentContent.media.contentId}?t=${Math.ceil(currentContent.currentTime + 1.3)}`;
-
-        browser(link);
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.header('Access-Control-Expose-Headers', 'Content-Length');
+    res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
+    if (req.method === 'OPTIONS') {
+        return res.send(200);
+    } else {
+        return next();
     }
-}
+});
 
-async function start() {
-    const castedApp = await ChromeCastService.getChromecastApplication();
+app.use(bodyParser.json());
+ChromecastRouter.routesConfig(app);
 
-    setInterval(() => sync(castedApp), UPDATE_INTERVAL);
-}
+app.listen(config.port, function () {
+    console.log('app listening at port %s', config.port);
+});
 
-start();
+app.get('/', (req, res) => { res.send('app listening at port ' + config.port);});
