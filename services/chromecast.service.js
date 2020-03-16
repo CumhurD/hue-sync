@@ -1,20 +1,25 @@
 var chromecasts = require('chromecasts')()
 
+var devices = [];
+
 chromecasts.on('update', function (player) {
     console.warn('New device found! ' + player.name);
+    devices.push(player);
 });
 
 function getDevices() {
-    let devices = chromecasts.players
+    let devs = devices
         .map(device => { return { name: device.name, host: device.host } });
-    return devices;
+    return devs;
 }
 
 async function getDevice(deviceId) {
-    let device = chromecasts.players.find(d => d.name == deviceId);
+    if (!deviceId)
+        return {};
+    let device = devices.find(d => d.name == deviceId);
 
     if (!device) {
-        throw 'Device not found!';
+        return console.error('Device not found!');
     }
 
     return await new Promise((resolve, reject) => {
