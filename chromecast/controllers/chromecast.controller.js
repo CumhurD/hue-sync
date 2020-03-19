@@ -1,4 +1,5 @@
 const chromecastService = require('../../services/chromecast.service');
+const contentService = require('../../services/content.service');
 
 
 exports.list = (req, res) => {
@@ -8,7 +9,7 @@ exports.list = (req, res) => {
 };
 
 exports.getById = async (req, res) => {
-    const device = await chromecastService.getDevice(req.params.castId);
+    const device = await contentService.getContent(req.params.castId);
 
     res.send(device);
 };
