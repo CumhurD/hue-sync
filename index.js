@@ -26,4 +26,9 @@ app.listen(config.port, function () {
     console.log('app listening at port %s', config.port);
 });
 
-app.get('/', (req, res) => { res.send('app listening at port ' + config.port);});
+app.get('/', (req, res) => { res.send('app listening at port ' + config.port); });
+
+app.use(function (err, req, res, next) {
+    console.error(err);
+    res.status(500).send(err);
+});
