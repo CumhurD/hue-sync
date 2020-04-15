@@ -19,7 +19,8 @@ async function getDevice(deviceId) {
     let device = devices.find(d => d.name == deviceId);
 
     if (!device) {
-        return console.error('Device not found!');
+        console.error('Device not found!');
+        return;
     }
 
     return await new Promise((resolve, reject) => {
@@ -32,7 +33,24 @@ async function getDevice(deviceId) {
     });
 }
 
+async function getDeviceSafe(deviceId) {
+    let device = await getDevice(deviceId);
+
+    if (!device) {
+        console.log(`${deviceId} not found, will try again in 2 seconds..`);
+        await sleep(2000);
+        return await getDeviceSafe(deviceId);
+    }
+
+    return device;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 module.exports = {
     getDevices,
-    getDevice
+    getDevice,
+    getDeviceSafe
 }

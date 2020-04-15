@@ -7,4 +7,7 @@ exports.routesConfig = function (app) {
     app.get('/chromecast/:castId', [
         ChromeCastController.getById
     ]);
+    app.get('/chromecash/:castId/sync', [
+        
+    ])
 };

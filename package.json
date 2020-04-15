@@ -19,6 +19,7 @@
         "child_process": "^1.0.2",
         "chromecasts": "^1.9.1",
         "express": "^4.17.1",
+        "ffmpeg-extract-frames": "^2.0.2",
         "fs": "0.0.1-security",
         "get-image-colors": "^2.0.0",
         "jsonwebtoken": "^8.5.1",
@@ -30,6 +31,7 @@
         "sync-request": "^6.1.0",
         "uuid": "^3.3.3",
         "youtube-dl": "^3.0.2",
+        "youtube-frames": "^1.0.3",
         "youtube-player": "^5.5.2",
         "youtube-video-to-frames": "^1.0.2"
     }

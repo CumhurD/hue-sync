@@ -5,7 +5,7 @@ async function download(videoId, filePath) {
     return new Promise((resolve, reject) => {
         const videoLink = `http://www.youtube.com/watch?v=${videoId}`;
 
-        const video = youtubedl(videoLink, ['--format=133'], { cwd: __dirname });
+        const video = youtubedl(videoLink, ['--format=18'], { cwd: __dirname });
 
         video.on('info', function (info) {
             debugger;
@@ -18,8 +18,7 @@ async function download(videoId, filePath) {
         video.on('complete', function complete(info) {
             debugger;
             console.log('filename: ' + info._filename + ' already downloaded.');
-
-            resolve(info._filename);
+            resolve(filePath);
         });
 
         video.on('end', function () {
